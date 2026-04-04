@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo V1 · 考场经典版</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23114b6f'/%3E%3Cpath d='M16 32h32' stroke='%23ffffff' stroke-width='5'/%3E%3Cpath d='M28 20v24' stroke='%23ffffff' stroke-width='5'/%3E%3C/svg%3E" />
+    <style>
+      :root {
+        --bg: #ece9df;
+        --paper: #fbfaf5;
+        --ink: #1f2c3a;
+        --muted: #5c6a76;
+        --line: #c9c1af;
+        --primary: #114b6f;
+        --primary-soft: #dcebf4;
+        --accent: #c96c2f;
+        --ok: #1f7d54;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: radial-gradient(circle at 8% 0%, #f7f3e7, transparent 32%), var(--bg);
+        color: var(--ink);
+        font-family: 'Hiragino Sans GB', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        padding: 24px;
+      }
+
+      .frame {
+        max-width: 1240px;
+        margin: 0 auto;
+      }
+
+      .mast {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: linear-gradient(165deg, #fcfbf7, #f4f1e7);
+        padding: 18px 20px;
+        display: grid;
+        grid-template-columns: 1.2fr auto auto;
+        gap: 14px;
+        align-items: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: 'Songti SC', 'STSong', serif;
+        font-size: 30px;
+        letter-spacing: 0.02em;
+      }
+
+      .sub {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .mode-switch {
+        display: flex;
+        gap: 8px;
+      }
+
+      .mode-btn,
+      .pager button,
+      #toggleAnimBtn {
+        border: 1px solid #96aec0;
+        background: #eff6fb;
+        color: var(--primary);
+        border-radius: 999px;
+        font-weight: 700;
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+
+      .mode-btn.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+
+      .timer {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 8px 12px;
+        background: #fff;
+        font-weight: 700;
+      }
+
+      .summary-row {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+        padding: 5px 12px;
+        font-size: 14px;
+      }
+
+      .layout {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1.55fr 1fr;
+        gap: 14px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--paper);
+        padding: 14px;
+      }
+
+      #teacherHint {
+        border: 1px dashed #caa886;
+        background: #fff4e9;
+        border-radius: 10px;
+        padding: 8px 10px;
+        margin-bottom: 12px;
+        color: #81512e;
+        font-size: 14px;
+      }
+
+      .question-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .question-card {
+        border: 1px solid #d8d2c3;
+        border-radius: 12px;
+        background: #ffffff;
+        padding: 12px;
+      }
+
+      .card-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .qid {
+        font-weight: 800;
+        color: var(--primary);
+      }
+
+      .chapter {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .stem-text {
+        margin: 8px 0 10px;
+        line-height: 1.55;
+        font-size: 15px;
+      }
+
+      .stem-image {
+        border: 1px solid #cfd8dc;
+        border-radius: 10px;
+        background: #f4f8fb;
+        padding: 8px;
+      }
+
+      .stem-svg {
+        width: 100%;
+        display: block;
+      }
+
+      .stem-board {
+        fill: #f6fbff;
+        stroke: #bdd1df;
+        stroke-width: 1.5;
+      }
+
+      .stem-wire,
+      .stem-switch,
+      .stem-resistor,
+      .stem-lamp-cross,
+      .stem-battery-short,
+      .stem-battery-long {
+        stroke: #1c5477;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .stem-wire,
+      .stem-switch,
+      .stem-battery-short,
+      .stem-battery-long {
+        stroke-width: 3.4;
+      }
+
+      .stem-resistor,
+      .stem-lamp-cross {
+        stroke-width: 2.4;
+      }
+
+      .stem-lamp {
+        fill: #fff7cf;
+        stroke: #1c5477;
+        stroke-width: 3;
+      }
+
+      .stem-label {
+        fill: #194765;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .options-group {
+        margin-top: 10px;
+        display: grid;
+        gap: 6px;
+      }
+
+      .option-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .option-key {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--primary-soft);
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: var(--primary);
+        font-size: 12px;
+      }
+
+      .option-text {
+        font-size: 14px;
+      }
+
+      .pager {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .score {
+        margin-left: auto;
+        font-size: 14px;
+        color: #31684a;
+        opacity: 0;
+      }
+
+      .score.score-visible {
+        opacity: 1;
+      }
+
+      .analysis-title {
+        margin: 0;
+        font-family: 'Kaiti SC', 'STKaiti', serif;
+        font-size: 24px;
+      }
+
+      .analysis-sub {
+        margin: 6px 0 10px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .analysis-stage {
+        border: 1px solid #cfd8dc;
+        border-radius: 12px;
+        background: #f8fcff;
+        padding: 10px;
+      }
+
+      .analysis-svg {
+        width: 100%;
+        display: block;
+      }
+
+      .a-wire,
+      .a-switch {
+        stroke: #1d597f;
+        stroke-width: 3;
+        fill: none;
+        stroke-linecap: round;
+      }
+
+      .a-node {
+        fill: #1d597f;
+      }
+
+      .a-lamp {
+        fill: #f5f5f5;
+        stroke: #1d597f;
+        stroke-width: 2.5;
+      }
+
+      .a-lamp.lamp-on {
+        fill: #ffe483;
+        filter: drop-shadow(0 0 6px rgba(237, 182, 44, 0.75));
+      }
+
+      .a-flow {
+        stroke: #c96c2f;
+        stroke-width: 2.5;
+        fill: none;
+        stroke-dasharray: 6 6;
+        opacity: 0.25;
+      }
+
+      .a-flow.flow-on {
+        opacity: 1;
+        animation: dashMove 1s linear infinite;
+      }
+
+      @keyframes dashMove {
+        to {
+          stroke-dashoffset: -24;
+        }
+      }
+
+      .analysis-controls {
+        margin-top: 10px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      @media (max-width: 980px) {
+        body {
+          padding: 10px;
+        }
+
+        .mast {
+          grid-template-columns: 1fr;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .score {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <header class="mast">
+        <div>
+          <h1>电子电工高考题库 · Demo V1</h1>
+          <p class="sub">考场经典版：清晰分区、低干扰阅读、静态题图 + 动画解析区</p>
+        </div>
+        <div class="mode-switch">
+          <button id="modeStudentBtn" class="mode-btn active">学生端</button>
+          <button id="modeTeacherBtn" class="mode-btn">教师端</button>
+        </div>
+        <div class="timer">倒计时：<span id="timerLabel">00:45:00</span></div>
+      </header>
+
+      <div class="summary-row">
+        <span id="summaryLabel" class="chip">载入中...</span>
+        <span id="modeLabel" class="chip">学生模式</span>
+        <span id="pageInfo" class="chip">第 1 / 10 页</span>
+      </div>
+
+      <main class="layout">
+        <section class="panel">
+          <div id="teacherHint" hidden>教师模式：此处将显示录题与发布入口（demo占位）。</div>
+          <div id="questionList" class="question-list"></div>
+          <div class="pager">
+            <button id="prevBtn">上一页</button>
+            <button id="nextBtn">下一页</button>
+            <button id="submitPageBtn">提交本页</button>
+            <span id="scoreLabel" class="score">本页得分：0/4</span>
+          </div>
+        </section>
+
+        <aside class="panel">
+          <h2 class="analysis-title">解析演示</h2>
+          <p class="analysis-sub">题干题图保持静态，解析区可交互演示开关状态、电流与亮灯效果。</p>
+
+          <div class="analysis-stage">
+            <svg class="analysis-svg" viewBox="0 0 220 140" aria-label="解析动画电路图">
+              <defs>
+                <marker id="flowArrowV1" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+                  <polygon points="0,0 10,4 0,8" fill="#c96c2f" />
+                </marker>
+              </defs>
+              <line x1="22" y1="50" x2="80" y2="50" class="a-wire" />
+              <line x1="118" y1="50" x2="154" y2="50" class="a-wire" />
+              <line x1="154" y1="50" x2="178" y2="50" class="a-wire" />
+              <line x1="178" y1="50" x2="178" y2="108" class="a-wire" />
+              <line x1="178" y1="108" x2="22" y2="108" class="a-wire" />
+              <line x1="22" y1="108" x2="22" y2="50" class="a-wire" />
+
+              <line id="analysisSwitchBlade" x1="80" y1="50" x2="118" y2="50" class="a-switch" />
+              <circle cx="80" cy="50" r="3.6" class="a-node" />
+              <circle cx="118" cy="50" r="3.6" class="a-node" />
+
+              <circle id="analysisLamp" cx="178" cy="92" r="16" class="a-lamp lamp-on" />
+              <line x1="166" y1="80" x2="190" y2="104" class="a-switch" />
+              <line x1="190" y1="80" x2="166" y2="104" class="a-switch" />
+
+              <path id="analysisFlow" class="a-flow flow-on" d="M 24 64 C 64 18, 138 18, 176 64" marker-end="url(#flowArrowV1)" />
+              <text x="100" y="18" fill="#c96c2f" font-size="12" font-weight="700">电流方向 I</text>
+            </svg>
+          </div>
+
+          <div class="analysis-controls">
+            <button id="toggleAnimBtn">切换开关状态</button>
+            <strong id="switchStateLabel">开关状态：闭合</strong>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="./assets/quiz-engine.js"></script>
+    <script src="./assets/question-bank-40.js"></script>
+    <script src="./assets/demo-shell.js"></script>
+    <script>
+      DemoShell.init({ themeName: 'V1 考场经典版' });
+    </script>
+  </body>
+</html>

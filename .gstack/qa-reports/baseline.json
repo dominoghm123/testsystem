@@ -1,0 +1,16 @@
+{
+  "date": "2026-04-04",
+  "url": "http://localhost:5174/demos/",
+  "healthScore": 96,
+  "issues": [],
+  "categoryScores": {
+    "console": 100,
+    "links": 100,
+    "visual": 95,
+    "functional": 96,
+    "ux": 95,
+    "performance": 95,
+    "content": 95,
+    "accessibility": 94
+  }
+}
