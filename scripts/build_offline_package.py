@@ -61,17 +61,46 @@ def build_package() -> None:
 - `app/demos/assets/question-bank-40.js`：题库数据（当前为全量解析结果）
 - `app/demos/assets/source-parse-report.json`：题源解析覆盖报告
 
-## 使用方式（推荐）
-1. Windows：双击 `启动题库.bat`
-2. macOS：双击 `启动题库.command`
-3. Linux：执行 `bash 启动题库.sh`
+## 命令行安装（如缺 Python）
+只需 Python 3（无需 Node、无需外网服务）。
+
+### Windows（PowerShell）
+```powershell
+winget install -e --id Python.Python.3.11
+```
+
+### macOS（Terminal）
+```bash
+brew install python
+```
+
+### Ubuntu / Debian
+```bash
+sudo apt update && sudo apt install -y python3
+```
+
+## 命令行启动（推荐）
+先进入离线包目录，再启动本地服务：
+
+### Windows（PowerShell）
+```powershell
+cd .\\电子电工题库-离线包-v4\\app
+py -m http.server 5174
+```
+
+### macOS / Linux（Terminal）
+```bash
+cd ./电子电工题库-离线包-v4/app
+python3 -m http.server 5174
+```
 
 启动后访问：
 - [http://localhost:5174/demos/demo-v4-real-source-showcase.html](http://localhost:5174/demos/demo-v4-real-source-showcase.html)
 
-## 备用方式（无 Python）
-如果设备没有 Python，请直接打开：
-- `app/demos/demo-v4-real-source-showcase.html`
+## 一键脚本（可选）
+- Windows：`启动题库.bat`
+- macOS：`启动题库.command`
+- Linux：`bash 启动题库.sh`
 
 ## 关闭服务
 - 在启动脚本所在终端按 `Ctrl + C`。
