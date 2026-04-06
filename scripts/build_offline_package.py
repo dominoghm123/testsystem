@@ -64,9 +64,36 @@ def build_package() -> None:
 ## 命令行安装（如缺 Python）
 只需 Python 3（无需 Node、无需外网服务）。
 
-### Windows（PowerShell）
+### Windows 安装方案（PowerShell）
+
+#### 0) 先检查是否已安装
+```powershell
+py --version
+```
+若显示版本号（例如 `Python 3.11.x`），可直接跳到“命令行启动”。
+
+#### 1) 联网安装（推荐）
 ```powershell
 winget install -e --id Python.Python.3.11
+```
+安装完成后重开 PowerShell，再执行：
+```powershell
+py --version
+```
+
+#### 2) 无外网安装（学校机房常用）
+在一台可联网电脑下载官方安装包 `python-3.11.x-amd64.exe`（来自 `python.org`），拷贝到 U 盘后在目标电脑执行：
+```powershell
+cd D:\\
+.\\python-3.11.x-amd64.exe /quiet InstallAllUsers=1 PrependPath=1 Include_pip=1
+```
+然后重开 PowerShell，验证：
+```powershell
+py --version
+```
+若 `py` 不可用，改用：
+```powershell
+python --version
 ```
 
 ### macOS（Terminal）
