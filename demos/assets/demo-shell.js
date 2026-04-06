@@ -32,6 +32,19 @@
   }
 
   function createQuestionCard(question, answerValue) {
+    function renderStemVisual() {
+      if (question.image) {
+        return (
+          '<img class="stem-photo" src="' +
+          question.image +
+          '" alt="' +
+          question.id +
+          ' 题图" loading="lazy" style="width:100%;height:auto;display:block;object-fit:contain;border-radius:6px;" />'
+        );
+      }
+      return staticCircuitSvg(question.id);
+    }
+
     var optionsMarkup = question.options
       .map(function eachOption(optionText, idx) {
         var optionKey = ['A', 'B', 'C', 'D'][idx] || String.fromCharCode(65 + idx);
@@ -46,14 +59,30 @@
       })
       .join('');
 
+    var sourceMeta = '';
+    if (
+      question.explain &&
+      question.explain.params &&
+      question.explain.params.source &&
+      question.explain.params.sourceNo
+    ) {
+      sourceMeta =
+        '<div class="source-meta">题源：' +
+        question.explain.params.source +
+        ' · 原题号 ' +
+        question.explain.params.sourceNo +
+        '</div>';
+    }
+
     return (
       '<article class="question-card">' +
       '<header class="card-head">' +
       '<span class="qid">' + question.id + '</span>' +
       '<span class="chapter">' + question.chapter + '</span>' +
       '</header>' +
+      sourceMeta +
       '<p class="stem-text">' + question.stem + '</p>' +
-      '<div class="stem-image">' + staticCircuitSvg(question.id) + '</div>' +
+      '<div class="stem-image">' + renderStemVisual() + '</div>' +
       '<div class="options-group">' + optionsMarkup + '</div>' +
       '</article>'
     );

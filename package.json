@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "node --test tests/*.test.cjs"
+    "test": "node --test tests/*.test.cjs",
+    "build:question-bank": "python3 scripts/build_question_bank_from_pdfs.py",
+    "package:offline": "python3 scripts/build_offline_package.py"
   }
 }
